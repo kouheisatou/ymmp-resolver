@@ -23,10 +23,7 @@ function walkDir(dir: string): string[] {
  * Scan a folder recursively and find files matching the given filenames.
  * Returns a map of { originalFileName -> foundAbsolutePath }.
  */
-export function scanFolder(
-  folderPath: string,
-  fileNames: string[]
-): Record<string, string> {
+export function scanFolder(folderPath: string, fileNames: string[]): Record<string, string> {
   const allFiles = walkDir(folderPath);
   const result: Record<string, string> = {};
   const lowerNameSet = new Map<string, string>();

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { parseYmmp, applyNewPaths, AssetEntry, YmmpData } from '../lib/ymmp-parser';
 
 type AppState = 'empty' | 'loaded' | 'saving';
@@ -11,88 +11,164 @@ export default function Home() {
   const [statusMessage, setStatusMessage] = useState<string>('Ready');
   const [scanning, setScanning] = useState(false);
 
-  const handleOpenFile = useCallback(async () => {
-    const filePath = await window.electronAPI.openYmmpDialog();
-    if (!filePath) return;
+  const stateRef = useRef({ state, ymmpData, ymmpFilePath, assets, statusMessage });
+  useEffect(() => {
+    stateRef.current = { state, ymmpData, ymmpFilePath, assets, statusMessage };
+  }, [state, ymmpData, ymmpFilePath, assets, statusMessage]);
 
+  const loadFile = useCallback(async (filePath: string) => {
     setStatusMessage('Loading...');
-    try {
-      const { content } = await window.electronAPI.readYmmp(filePath);
-      const data = parseYmmp(content);
-      setYmmpData(data);
-      setYmmpFilePath(filePath);
-      setAssets(data.assets.map((a) => ({ ...a })));
-      setState('loaded');
-      setStatusMessage(`Loaded: ${data.assets.length} asset(s) found`);
-    } catch (err) {
-      setStatusMessage(`Error: ${err}`);
-    }
+    const { content } = await window.electronAPI.readYmmp(filePath);
+    const data = parseYmmp(content);
+    setYmmpData(data);
+    setYmmpFilePath(filePath);
+    const newAssets = data.assets.map((a) => ({ ...a }));
+    setAssets(newAssets);
+    setState('loaded');
+    const msg = `Loaded: ${data.assets.length} asset(s) found`;
+    setStatusMessage(msg);
+    return { assetCount: data.assets.length, filePath, status: msg };
   }, []);
 
-  const handleAutoRelink = useCallback(async () => {
-    if (!assets.length) return;
-
-    const folderPath = await window.electronAPI.selectFolderDialog();
-    if (!folderPath) return;
+  const relinkFromFolder = useCallback(async (folderPath: string) => {
+    const currentAssets = stateRef.current.assets;
+    if (!currentAssets.length) throw new Error('No file loaded');
 
     setScanning(true);
     setStatusMessage('Scanning folder...');
 
-    try {
-      const fileNames = assets.map((a) => a.fileName);
-      const found = await window.electronAPI.scanFolder(folderPath, fileNames);
+    const fileNames = currentAssets.map((a) => a.fileName);
+    const found = await window.electronAPI.scanFolder(folderPath, fileNames);
 
-      const updated = assets.map((asset) => {
-        const foundPath = found[asset.fileName];
-        if (foundPath) {
-          return { ...asset, newPath: foundPath };
-        }
-        return { ...asset };
-      });
+    const updated = currentAssets.map((asset) => {
+      const foundPath = found[asset.fileName];
+      if (foundPath) {
+        return { ...asset, newPath: foundPath };
+      }
+      return { ...asset };
+    });
 
-      setAssets(updated);
-      const foundCount = Object.keys(found).length;
-      setStatusMessage(
-        `Scan complete: ${foundCount}/${assets.length} file(s) found`
-      );
-    } catch (err) {
-      setStatusMessage(`Scan error: ${err}`);
-    } finally {
-      setScanning(false);
-    }
-  }, [assets]);
+    setAssets(updated);
+    setScanning(false);
+    const foundCount = Object.keys(found).length;
+    const msg = `Scan complete: ${foundCount}/${currentAssets.length} file(s) found`;
+    setStatusMessage(msg);
+    return {
+      foundCount,
+      totalCount: currentAssets.length,
+      found,
+      status: msg,
+    };
+  }, []);
 
-  const handleSave = useCallback(async () => {
-    if (!ymmpData) return;
+  const saveFile = useCallback(async () => {
+    const { ymmpData: data, ymmpFilePath: filePath, assets: currentAssets } = stateRef.current;
+    if (!data) throw new Error('No file loaded');
 
     setState('saving');
     setStatusMessage('Saving...');
 
+    const dataToSave: YmmpData = { ...data, assets: currentAssets };
+    const jsonString = applyNewPaths(dataToSave);
+    await window.electronAPI.saveYmmp(filePath, jsonString);
+
+    setState('loaded');
+    setStatusMessage('Saved successfully!');
+    return { filePath, status: 'Saved successfully!' };
+  }, []);
+
+  // --- Debug command listener ---
+  useEffect(() => {
+    if (!window.electronAPI?.onDebugCommand) return;
+
+    window.electronAPI.onDebugCommand(async ({ id, type, payload }) => {
+      try {
+        let result: any;
+        switch (type) {
+          case 'get-state': {
+            const s = stateRef.current;
+            result = {
+              appState: s.state,
+              filePath: s.ymmpFilePath,
+              statusMessage: s.statusMessage,
+              assets: s.assets.map((a) => ({
+                fileName: a.fileName,
+                originalPath: a.originalPath,
+                newPath: a.newPath,
+                type: a.type,
+              })),
+            };
+            break;
+          }
+          case 'open':
+            result = await loadFile(payload.filePath);
+            break;
+          case 'relink':
+            result = await relinkFromFolder(payload.folderPath);
+            break;
+          case 'update-asset': {
+            const { index, newPath } = payload;
+            setAssets((prev) => {
+              const next = [...prev];
+              if (index >= 0 && index < next.length) {
+                next[index] = { ...next[index], newPath };
+              }
+              return next;
+            });
+            result = { index, newPath, status: 'updated' };
+            break;
+          }
+          case 'save':
+            result = await saveFile();
+            break;
+          default:
+            throw new Error(`Unknown command: ${type}`);
+        }
+        window.electronAPI.sendDebugResponse(id, result, null);
+      } catch (err: any) {
+        window.electronAPI.sendDebugResponse(id, null, err.message || String(err));
+      }
+    });
+  }, [loadFile, relinkFromFolder, saveFile]);
+
+  // --- UI event handlers (dialog-based, for manual use) ---
+
+  const handleOpenFile = useCallback(async () => {
+    const filePath = await window.electronAPI.openYmmpDialog();
+    if (!filePath) return;
     try {
-      const dataToSave: YmmpData = {
-        ...ymmpData,
-        assets: assets,
-      };
-      const jsonString = applyNewPaths(dataToSave);
-      await window.electronAPI.saveYmmp(ymmpFilePath, jsonString);
-      setStatusMessage('Saved successfully!');
+      await loadFile(filePath);
+    } catch (err) {
+      setStatusMessage(`Error: ${err}`);
+    }
+  }, [loadFile]);
+
+  const handleAutoRelink = useCallback(async () => {
+    if (!assets.length) return;
+    const folderPath = await window.electronAPI.selectFolderDialog();
+    if (!folderPath) return;
+    try {
+      await relinkFromFolder(folderPath);
+    } catch (err) {
+      setStatusMessage(`Scan error: ${err}`);
+    }
+  }, [assets, relinkFromFolder]);
+
+  const handleSave = useCallback(async () => {
+    try {
+      await saveFile();
     } catch (err) {
       setStatusMessage(`Save error: ${err}`);
-    } finally {
-      setState('loaded');
     }
-  }, [ymmpData, assets, ymmpFilePath]);
+  }, [saveFile]);
 
-  const handleNewPathChange = useCallback(
-    (index: number, value: string) => {
-      setAssets((prev) => {
-        const next = [...prev];
-        next[index] = { ...next[index], newPath: value };
-        return next;
-      });
-    },
-    []
-  );
+  const handleNewPathChange = useCallback((index: number, value: string) => {
+    setAssets((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], newPath: value };
+      return next;
+    });
+  }, []);
 
   const hasChanges = assets.some((a) => a.newPath.trim() !== '');
 
@@ -165,17 +241,11 @@ export default function Home() {
                   </td>
                   <td title={asset.fileName}>{asset.fileName}</td>
                   <td title={asset.originalPath}>
-                    <span style={{ fontSize: 13, opacity: 0.7 }}>
-                      {asset.originalPath}
-                    </span>
+                    <span style={{ fontSize: 13, opacity: 0.7 }}>{asset.originalPath}</span>
                   </td>
                   <td>
                     <input
-                      className={`retro-input ${
-                        asset.newPath
-                          ? 'status-found'
-                          : ''
-                      }`}
+                      className={`retro-input ${asset.newPath ? 'status-found' : ''}`}
                       value={asset.newPath}
                       onChange={(e) => handleNewPathChange(i, e.target.value)}
                       placeholder="Enter new path or use Auto Re-link"

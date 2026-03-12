@@ -1,19 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
 
 :root {
-  --bg: #C0C0C0;
-  --bg-dark: #A0A0A0;
-  --bg-light: #D4D0C8;
-  --highlight: #FFFFFF;
+  --bg: #c0c0c0;
+  --bg-dark: #a0a0a0;
+  --bg-light: #d4d0c8;
+  --highlight: #ffffff;
   --shadow: #808080;
   --shadow-dark: #404040;
   --text: #000000;
   --text-disabled: #808080;
   --accent: #000080;
-  --accent-light: #1084D0;
-  --titlebar-bg: linear-gradient(90deg,
-    #000080 0%, #1084D0 100%);
-  --input-bg: #FFFFFF;
+  --accent-light: #1084d0;
+  --titlebar-bg: linear-gradient(90deg, #000080 0%, #1084d0 100%);
+  --input-bg: #ffffff;
   --font-main: 'VT323', 'Chicago', 'Geneva', 'Monaco', monospace;
   --border-radius: 0px;
 }
@@ -24,7 +23,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+html,
+body {
   height: 100%;
   font-family: var(--font-main);
   font-size: 16px;
@@ -40,13 +40,17 @@ html, body {
 .bevel-raised {
   border: 2px solid;
   border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
-  box-shadow: inset 1px 1px 0 var(--bg-light), inset -1px -1px 0 var(--shadow);
+  box-shadow:
+    inset 1px 1px 0 var(--bg-light),
+    inset -1px -1px 0 var(--shadow);
 }
 
 .bevel-sunken {
   border: 2px solid;
   border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
-  box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--bg-light);
+  box-shadow:
+    inset 1px 1px 0 var(--shadow),
+    inset -1px -1px 0 var(--bg-light);
 }
 
 /* ===== Window ===== */
@@ -65,7 +69,7 @@ html, body {
 
 .retro-titlebar {
   background: var(--titlebar-bg);
-  color: #FFFFFF;
+  color: #ffffff;
   font-size: 18px;
   font-weight: bold;
   padding: 4px 8px;
@@ -87,7 +91,7 @@ html, body {
 
 .retro-titlebar__text {
   flex: 1;
-  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* ===== Menu Bar ===== */
@@ -110,7 +114,9 @@ html, body {
   color: var(--text);
   border: 2px solid;
   border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
-  box-shadow: inset 1px 1px 0 var(--bg-light), inset -1px -1px 0 var(--shadow);
+  box-shadow:
+    inset 1px 1px 0 var(--bg-light),
+    inset -1px -1px 0 var(--shadow);
   padding: 4px 16px;
   cursor: pointer;
   letter-spacing: 0.5px;
@@ -124,7 +130,9 @@ html, body {
 
 .retro-btn:active {
   border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
-  box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--bg-light);
+  box-shadow:
+    inset 1px 1px 0 var(--shadow),
+    inset -1px -1px 0 var(--bg-light);
   padding: 5px 15px 3px 17px;
 }
 
@@ -135,7 +143,9 @@ html, body {
 
 .retro-btn:disabled:active {
   border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
-  box-shadow: inset 1px 1px 0 var(--bg-light), inset -1px -1px 0 var(--shadow);
+  box-shadow:
+    inset 1px 1px 0 var(--bg-light),
+    inset -1px -1px 0 var(--shadow);
   padding: 4px 16px;
 }
 
@@ -189,12 +199,12 @@ html, body {
 
 .retro-table td {
   padding: 3px 8px;
-  border-bottom: 1px solid #E0E0E0;
+  border-bottom: 1px solid #e0e0e0;
   vertical-align: middle;
 }
 
 .retro-table tr:hover td {
-  background: #E8E8FF;
+  background: #e8e8ff;
 }
 
 .retro-table .type-badge {
@@ -330,7 +340,7 @@ html, body {
 }
 
 .status-missing {
-  color: #C00000;
+  color: #c00000;
 }
 
 .status-modified {

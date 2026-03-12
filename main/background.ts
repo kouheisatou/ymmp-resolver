@@ -1,5 +1,5 @@
 import path from 'path';
-import { app, ipcMain, dialog, BrowserWindow, protocol, net } from 'electron';
+import { app, ipcMain, dialog, BrowserWindow, protocol, net, Menu } from 'electron';
 import { scanFolder } from './helpers/file-scanner';
 import { startDebugServer, stopDebugServer } from './helpers/debug-server';
 import fs from 'fs';
@@ -49,6 +49,16 @@ async function createWindow() {
 }
 
 app.on('ready', async () => {
+  Menu.setApplicationMenu(
+    Menu.buildFromTemplate([
+      { role: 'appMenu' },
+      { role: 'fileMenu' },
+      { role: 'editMenu' },
+      { role: 'viewMenu' },
+      { role: 'windowMenu' },
+    ]),
+  );
+
   await createWindow();
 
   if (!isProd && mainWindow) {
@@ -89,18 +99,12 @@ ipcMain.handle('file:read-ymmp', async (_event, filePath: string) => {
   return { content, filePath };
 });
 
-ipcMain.handle(
-  'file:save-ymmp',
-  async (_event, filePath: string, jsonString: string) => {
-    const bom = '\uFEFF';
-    fs.writeFileSync(filePath, bom + jsonString, 'utf-8');
-    return true;
-  }
-);
+ipcMain.handle('file:save-ymmp', async (_event, filePath: string, jsonString: string) => {
+  const bom = '\uFEFF';
+  fs.writeFileSync(filePath, bom + jsonString, 'utf-8');
+  return true;
+});
 
-ipcMain.handle(
-  'file:scan-folder',
-  async (_event, folderPath: string, fileNames: string[]) => {
-    return scanFolder(folderPath, fileNames);
-  }
-);
+ipcMain.handle('file:scan-folder', async (_event, folderPath: string, fileNames: string[]) => {
+  return scanFolder(folderPath, fileNames);
+});
