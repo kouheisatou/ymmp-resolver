@@ -10,20 +10,38 @@
     "build:win": "nextron build --win",
     "build:linux": "nextron build --linux",
     "postinstall": "electron-builder install-app-deps",
-    "screenshot": "npx ts-node --esm --skip-project scripts/screenshot.ts"
+    "screenshot": "npx ts-node --esm --skip-project scripts/screenshot.ts",
+    "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
+    "lint:fix": "eslint . --ext .ts,.tsx --fix",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write .",
+    "audit:ci": "npm audit --omit=dev"
   },
   "dependencies": {
-    "next": "^14.2.23",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "^22.13.0",
     "@types/react": "^19.0.0",
-    "electron": "^33.3.1",
-    "electron-builder": "^25.1.8",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
+    "@typescript-eslint/parser": "^8.57.0",
+    "electron": "^41.0.0",
+    "electron-builder": "^26.8.1",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.35",
+    "eslint-config-prettier": "^10.1.8",
+    "next": "^14.2.23",
     "nextron": "^9.5.0",
+    "prettier": "^3.8.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
+  },
+  "overrides": {
+    "@babel/runtime": "^7.26.10",
+    "@babel/runtime-corejs3": "^7.26.10",
+    "serialize-javascript": "^7.0.4",
+    "terser-webpack-plugin": "^5.4.0",
+    "webpack": "^5.105.0"
   }
 }

@@ -12,19 +12,19 @@
 
 ## カラーパレット
 
-| 用途 | カラーコード | 説明 |
-|------|------------|------|
-| Base BG | `#C0C0C0` | メイン背景（クラシックグレー） |
-| Dark BG | `#A0A0A0` | 暗めの背景 |
-| Light BG | `#D4D0C8` | 明るめの背景 |
-| Highlight | `#FFFFFF` | 3Dベベルのハイライト面 |
-| Shadow | `#808080` | 3Dベベルのシャドウ面 |
-| Shadow Dark | `#404040` | 3Dベベルの濃いシャドウ |
-| Text | `#000000` | テキスト |
-| Text Disabled | `#808080` | 無効テキスト |
-| Accent | `#000080` | アクセント（ネイビーブルー） |
-| Accent Light | `#1084D0` | タイトルバーグラデーション用 |
-| Input BG | `#FFFFFF` | 入力フィールド背景 |
+| 用途          | カラーコード | 説明                           |
+| ------------- | ------------ | ------------------------------ |
+| Base BG       | `#C0C0C0`    | メイン背景（クラシックグレー） |
+| Dark BG       | `#A0A0A0`    | 暗めの背景                     |
+| Light BG      | `#D4D0C8`    | 明るめの背景                   |
+| Highlight     | `#FFFFFF`    | 3Dベベルのハイライト面         |
+| Shadow        | `#808080`    | 3Dベベルのシャドウ面           |
+| Shadow Dark   | `#404040`    | 3Dベベルの濃いシャドウ         |
+| Text          | `#000000`    | テキスト                       |
+| Text Disabled | `#808080`    | 無効テキスト                   |
+| Accent        | `#000080`    | アクセント（ネイビーブルー）   |
+| Accent Light  | `#1084D0`    | タイトルバーグラデーション用   |
+| Input BG      | `#FFFFFF`    | 入力フィールド背景             |
 
 ## タイポグラフィ
 
@@ -68,6 +68,7 @@
 ### 3. ボタン (RetroButton)
 
 **通常状態:**
+
 ```
   ┌─ highlight (white)
   │ ┌─ light inset
@@ -81,11 +82,13 @@
 ```
 
 **押下状態:**
+
 - border反転: shadow-dark / highlight が入れ替わり
 - box-shadow反転: 凹み表現
 - テキスト位置が右下に1pxシフト
 
 **Primary バリアント:**
+
 - 太字テキスト
 - 黒い2pxのoutline（`outline: 2px solid #000; outline-offset: -4px`）
 

@@ -52,9 +52,7 @@ export default function Home() {
 
       setAssets(updated);
       const foundCount = Object.keys(found).length;
-      setStatusMessage(
-        `Scan complete: ${foundCount}/${assets.length} file(s) found`
-      );
+      setStatusMessage(`Scan complete: ${foundCount}/${assets.length} file(s) found`);
     } catch (err) {
       setStatusMessage(`Scan error: ${err}`);
     } finally {
@@ -83,16 +81,13 @@ export default function Home() {
     }
   }, [ymmpData, assets, ymmpFilePath]);
 
-  const handleNewPathChange = useCallback(
-    (index: number, value: string) => {
-      setAssets((prev) => {
-        const next = [...prev];
-        next[index] = { ...next[index], newPath: value };
-        return next;
-      });
-    },
-    []
-  );
+  const handleNewPathChange = useCallback((index: number, value: string) => {
+    setAssets((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], newPath: value };
+      return next;
+    });
+  }, []);
 
   const hasChanges = assets.some((a) => a.newPath.trim() !== '');
 
@@ -165,17 +160,11 @@ export default function Home() {
                   </td>
                   <td title={asset.fileName}>{asset.fileName}</td>
                   <td title={asset.originalPath}>
-                    <span style={{ fontSize: 13, opacity: 0.7 }}>
-                      {asset.originalPath}
-                    </span>
+                    <span style={{ fontSize: 13, opacity: 0.7 }}>{asset.originalPath}</span>
                   </td>
                   <td>
                     <input
-                      className={`retro-input ${
-                        asset.newPath
-                          ? 'status-found'
-                          : ''
-                      }`}
+                      className={`retro-input ${asset.newPath ? 'status-found' : ''}`}
                       value={asset.newPath}
                       onChange={(e) => handleNewPathChange(i, e.target.value)}
                       placeholder="Enter new path or use Auto Re-link"

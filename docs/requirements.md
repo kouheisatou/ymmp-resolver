@@ -36,13 +36,13 @@ YukkuriMovieMaker4 (YMM4) のプロジェクトファイル (.ymmp) 内で、
 
 メイン画面にテーブル形式で以下の情報を表示:
 
-| 列 | 内容 |
-|---|---|
-| # | 連番 |
-| Type | アイテム種別 (VideoItem / ImageItem / AudioItem) |
-| File Name | ファイル名 (basename) |
-| Original Path | 元の絶対パス (読み取り専用) |
-| New Path | 修正後のパス (入力可能) |
+| 列            | 内容                                             |
+| ------------- | ------------------------------------------------ |
+| #             | 連番                                             |
+| Type          | アイテム種別 (VideoItem / ImageItem / AudioItem) |
+| File Name     | ファイル名 (basename)                            |
+| Original Path | 元の絶対パス (読み取り専用)                      |
+| New Path      | 修正後のパス (入力可能)                          |
 
 ### F-003: 自動再リンク
 

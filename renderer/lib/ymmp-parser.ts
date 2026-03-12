@@ -43,9 +43,7 @@ export function parseYmmp(jsonString: string): YmmpData {
       const filePath = item.FilePath;
       if (!filePath) continue;
 
-      const matchesType = ITEM_TYPES_WITH_FILE.some((t) =>
-        itemType.startsWith(t)
-      );
+      const matchesType = ITEM_TYPES_WITH_FILE.some((t) => itemType.startsWith(t));
       if (!matchesType) continue;
 
       const existing = pathMap.get(filePath);
