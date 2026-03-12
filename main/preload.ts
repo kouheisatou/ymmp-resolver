@@ -13,6 +13,14 @@ const api = {
 
   scanFolder: (folderPath: string, fileNames: string[]): Promise<Record<string, string>> =>
     ipcRenderer.invoke('file:scan-folder', folderPath, fileNames),
+
+  onDebugCommand: (callback: (data: { id: string; type: string; payload: any }) => void) => {
+    ipcRenderer.on('debug:command', (_event, data) => callback(data));
+  },
+
+  sendDebugResponse: (id: string, result: any, error: string | null) => {
+    ipcRenderer.send('debug:response', { id, result, error });
+  },
 };
 
 contextBridge.exposeInMainWorld('electronAPI', api);
