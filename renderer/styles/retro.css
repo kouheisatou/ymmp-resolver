@@ -1,0 +1,405 @@
+@import url('https://fonts.googleapis.com/css2?family=VT323&display=swap');
+
+:root {
+  --bg: #C0C0C0;
+  --bg-dark: #A0A0A0;
+  --bg-light: #D4D0C8;
+  --highlight: #FFFFFF;
+  --shadow: #808080;
+  --shadow-dark: #404040;
+  --text: #000000;
+  --text-disabled: #808080;
+  --accent: #000080;
+  --accent-light: #1084D0;
+  --titlebar-bg: linear-gradient(90deg,
+    #000080 0%, #1084D0 100%);
+  --input-bg: #FFFFFF;
+  --font-main: 'VT323', 'Chicago', 'Geneva', 'Monaco', monospace;
+  --border-radius: 0px;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: var(--font-main);
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: unset;
+  image-rendering: pixelated;
+}
+
+/* ===== Retro 3D Border Utils ===== */
+
+.bevel-raised {
+  border: 2px solid;
+  border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
+  box-shadow: inset 1px 1px 0 var(--bg-light), inset -1px -1px 0 var(--shadow);
+}
+
+.bevel-sunken {
+  border: 2px solid;
+  border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
+  box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--bg-light);
+}
+
+/* ===== Window ===== */
+
+.retro-window {
+  background: var(--bg);
+  border: 2px solid;
+  border-color: var(--bg-light) var(--shadow-dark) var(--shadow-dark) var(--bg-light);
+  box-shadow: 1px 1px 0 var(--shadow-dark);
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* ===== Title Bar ===== */
+
+.retro-titlebar {
+  background: var(--titlebar-bg);
+  color: #FFFFFF;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+  -webkit-app-region: drag;
+  letter-spacing: 1px;
+}
+
+.retro-titlebar__icon {
+  width: 16px;
+  height: 16px;
+  background: var(--highlight);
+  border: 1px solid var(--shadow);
+  image-rendering: pixelated;
+}
+
+.retro-titlebar__text {
+  flex: 1;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.5);
+}
+
+/* ===== Menu Bar ===== */
+
+.retro-menubar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--shadow);
+  padding: 2px 4px;
+  display: flex;
+  gap: 2px;
+  -webkit-app-region: no-drag;
+}
+
+/* ===== Buttons ===== */
+
+.retro-btn {
+  font-family: var(--font-main);
+  font-size: 16px;
+  background: var(--bg);
+  color: var(--text);
+  border: 2px solid;
+  border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
+  box-shadow: inset 1px 1px 0 var(--bg-light), inset -1px -1px 0 var(--shadow);
+  padding: 4px 16px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  -webkit-app-region: no-drag;
+}
+
+.retro-btn:hover {
+  background: var(--bg-light);
+}
+
+.retro-btn:active {
+  border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
+  box-shadow: inset 1px 1px 0 var(--shadow), inset -1px -1px 0 var(--bg-light);
+  padding: 5px 15px 3px 17px;
+}
+
+.retro-btn:disabled {
+  color: var(--text-disabled);
+  cursor: default;
+}
+
+.retro-btn:disabled:active {
+  border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
+  box-shadow: inset 1px 1px 0 var(--bg-light), inset -1px -1px 0 var(--shadow);
+  padding: 4px 16px;
+}
+
+.retro-btn--primary {
+  font-weight: bold;
+  outline: 2px solid var(--text);
+  outline-offset: -4px;
+}
+
+.retro-btn--small {
+  font-size: 14px;
+  padding: 2px 8px;
+}
+
+/* ===== Table ===== */
+
+.retro-table-wrapper {
+  flex: 1;
+  overflow: auto;
+  margin: 8px;
+  border: 2px solid;
+  border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
+  box-shadow: inset 1px 1px 0 var(--shadow);
+  background: var(--input-bg);
+}
+
+.retro-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 15px;
+}
+
+.retro-table thead {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.retro-table th {
+  background: var(--bg);
+  border: 1px solid;
+  border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
+  box-shadow: inset 1px 1px 0 var(--bg-light);
+  padding: 4px 8px;
+  text-align: left;
+  font-weight: bold;
+  white-space: nowrap;
+  user-select: none;
+  cursor: default;
+}
+
+.retro-table td {
+  padding: 3px 8px;
+  border-bottom: 1px solid #E0E0E0;
+  vertical-align: middle;
+}
+
+.retro-table tr:hover td {
+  background: #E8E8FF;
+}
+
+.retro-table .type-badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 1px 6px;
+  background: var(--bg);
+  border: 1px solid var(--shadow);
+}
+
+/* ===== Input Fields ===== */
+
+.retro-input {
+  font-family: var(--font-main);
+  font-size: 15px;
+  background: var(--input-bg);
+  color: var(--text);
+  border: 2px solid;
+  border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
+  box-shadow: inset 1px 1px 0 var(--shadow);
+  padding: 3px 6px;
+  width: 100%;
+  outline: none;
+}
+
+.retro-input:focus {
+  outline: 1px dotted var(--text);
+  outline-offset: -1px;
+}
+
+.retro-input--readonly {
+  background: var(--bg-light);
+  color: var(--text-disabled);
+}
+
+/* ===== Status Bar ===== */
+
+.retro-statusbar {
+  background: var(--bg);
+  border-top: 1px solid var(--highlight);
+  padding: 3px 8px;
+  font-size: 14px;
+  display: flex;
+  gap: 16px;
+}
+
+.retro-statusbar__section {
+  border: 1px solid;
+  border-color: var(--shadow) var(--highlight) var(--highlight) var(--shadow);
+  padding: 1px 8px;
+  flex: 1;
+}
+
+.retro-statusbar__section:first-child {
+  flex: 3;
+}
+
+/* ===== Toolbar ===== */
+
+.retro-toolbar {
+  background: var(--bg);
+  border-bottom: 1px solid var(--shadow);
+  padding: 6px 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  -webkit-app-region: no-drag;
+}
+
+.retro-toolbar__separator {
+  width: 2px;
+  height: 24px;
+  border-left: 1px solid var(--shadow);
+  border-right: 1px solid var(--highlight);
+  margin: 0 4px;
+}
+
+/* ===== File path display ===== */
+
+.retro-filepath {
+  font-size: 14px;
+  padding: 2px 8px;
+  background: var(--input-bg);
+  border: 1px solid;
+  border-color: var(--shadow) var(--highlight) var(--highlight) var(--shadow);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* ===== Empty state ===== */
+
+.retro-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  gap: 16px;
+  color: var(--text-disabled);
+  font-size: 20px;
+}
+
+.retro-empty__icon {
+  font-size: 28px;
+  line-height: 1;
+  opacity: 0.6;
+  border: 2px solid;
+  border-color: var(--shadow-dark) var(--highlight) var(--highlight) var(--shadow-dark);
+  padding: 24px 20px 8px;
+  background: var(--input-bg);
+  box-shadow: inset 1px 1px 0 var(--shadow);
+  position: relative;
+}
+
+.retro-empty__icon::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: var(--bg);
+  border-bottom: 1px solid var(--shadow);
+}
+
+/* ===== Status indicators ===== */
+
+.status-found {
+  color: #008000;
+}
+
+.status-missing {
+  color: #C00000;
+}
+
+.status-modified {
+  color: #000080;
+}
+
+/* ===== Scrollbar retro style ===== */
+
+::-webkit-scrollbar {
+  width: 16px;
+  height: 16px;
+}
+
+::-webkit-scrollbar-track {
+  background: repeating-caret;
+  background-image: repeating-linear-gradient(
+    45deg,
+    var(--bg) 0px,
+    var(--bg) 2px,
+    var(--bg-light) 2px,
+    var(--bg-light) 4px
+  );
+  border: 1px solid var(--shadow);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bg);
+  border: 2px solid;
+  border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
+}
+
+::-webkit-scrollbar-button {
+  display: block;
+  width: 16px;
+  height: 16px;
+  background: var(--bg);
+  border: 2px solid;
+  border-color: var(--highlight) var(--shadow-dark) var(--shadow-dark) var(--highlight);
+}
+
+/* ===== Dialog overlay ===== */
+
+.retro-dialog-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.retro-dialog {
+  background: var(--bg);
+  border: 2px solid;
+  border-color: var(--bg-light) var(--shadow-dark) var(--shadow-dark) var(--bg-light);
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+  min-width: 300px;
+  max-width: 500px;
+}
+
+.retro-dialog__body {
+  padding: 16px 24px;
+  font-size: 16px;
+}
+
+.retro-dialog__actions {
+  padding: 8px 24px 16px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}

@@ -1,0 +1,25 @@
+appId: com.ymmp-resolver.app
+productName: YMMP Resolver
+copyright: Copyright © 2026
+directories:
+  output: dist
+  buildResources: resources
+files:
+  - from: .
+    filter:
+      - package.json
+      - app
+asar: true
+mac:
+  target:
+    - dmg
+    - zip
+  artifactName: "${productName}-${version}-mac-${arch}.${ext}"
+win:
+  target:
+    - nsis
+  artifactName: "${productName}-${version}-win.${ext}"
+nsis:
+  oneClick: true
+  perMachine: false
+  allowToChangeInstallationDirectory: false
