@@ -11,16 +11,7 @@ files:
       - package.json
       - app
 asar: true
-mac:
-  target:
-    - dmg
-    - zip
-  artifactName: '${productName}-${version}-mac-${arch}.${ext}'
 win:
   target:
-    - nsis
+    - portable
   artifactName: '${productName}-${version}-win.${ext}'
-nsis:
-  oneClick: true
-  perMachine: false
-  allowToChangeInstallationDirectory: false

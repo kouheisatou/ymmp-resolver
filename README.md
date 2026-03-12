@@ -237,12 +237,51 @@ npm run screenshot   # アプリのスクリーンショットを debug/screensh
 5. 2 に戻る
 ```
 
-### エンドポイント
+### ユーティリティエンドポイント
 
-| URL                                 | 説明                                      |
-| ----------------------------------- | ----------------------------------------- |
-| `http://127.0.0.1:13456/screenshot` | ウィンドウの PNG スクリーンショットを返す |
-| `http://127.0.0.1:13456/health`     | サーバー起動確認                          |
+| メソッド | URL           | 説明                                      |
+| -------- | ------------- | ----------------------------------------- |
+| `GET`    | `/screenshot` | ウィンドウの PNG スクリーンショットを返す |
+| `GET`    | `/health`     | サーバー起動確認（`{ "status": "ok" }`）  |
+
+### 操作 API エンドポイント
+
+ボタン操作と同等の機能を HTTP API で提供する。AI エージェントはダイアログを介さずにプログラム的にアプリを操作できる。
+
+| メソッド | URL           | リクエストボディ                             | 説明                             |
+| -------- | ------------- | -------------------------------------------- | -------------------------------- |
+| `GET`    | `/api/state`  | なし                                         | 現在のアプリ状態・素材一覧を取得 |
+| `POST`   | `/api/open`   | `{ "filePath": "/path/to/file.ymmp" }`       | ymmp ファイルを読み込む          |
+| `POST`   | `/api/relink` | `{ "folderPath": "/path/to/search/folder" }` | 指定フォルダで自動再リンク       |
+| `PATCH`  | `/api/assets` | `{ "index": 0, "newPath": "/new/path.mp4" }` | 特定素材のパスを手動更新         |
+| `POST`   | `/api/save`   | なし（`{}` を送る）                          | 現在の変更を ymmp に保存         |
+
+全レスポンスは JSON 形式。エラー時は `{ "error": "message" }` を返す。
+
+### AI 操作フローの例
+
+```bash
+# 1. ymmp ファイルを開く
+curl -X POST http://127.0.0.1:13456/api/open \
+  -d '{"filePath": "/Users/kohei/Desktop/ymmp-resolver/project-file-sample.ymmp"}'
+
+# 2. 現在の素材一覧を確認
+curl http://127.0.0.1:13456/api/state
+
+# 3. フォルダを指定して自動再リンク
+curl -X POST http://127.0.0.1:13456/api/relink \
+  -d '{"folderPath": "/Users/kohei/Desktop/assets"}'
+
+# 4. 特定の素材パスを手動修正
+curl -X PATCH http://127.0.0.1:13456/api/assets \
+  -d '{"index": 0, "newPath": "/Users/kohei/Desktop/assets/video.mp4"}'
+
+# 5. 保存
+curl -X POST http://127.0.0.1:13456/api/save -d '{}'
+
+# 6. スクリーンショットで結果確認
+npm run screenshot
+```
 
 本番ビルドではデバッグサーバーは起動しない。
 

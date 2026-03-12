@@ -4,11 +4,8 @@
   "description": "YukkuriMovieMaker4 asset file re-linker",
   "main": "app/background.js",
   "scripts": {
-    "dev": "nextron",
-    "build": "nextron build",
-    "build:mac": "nextron build --mac",
-    "build:win": "nextron build --win",
-    "build:linux": "nextron build --linux",
+    "dev": "nextron --electron-options=\"--remote-debugging-port=0 --inspect=0\"",
+    "build": "nextron build --win",
     "postinstall": "electron-builder install-app-deps",
     "screenshot": "npx ts-node --esm --skip-project scripts/screenshot.ts",
     "lint": "eslint . --ext .ts,.tsx --max-warnings 0",
