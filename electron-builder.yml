@@ -1,6 +1,7 @@
 appId: com.ymmp-resolver.app
 productName: YMMP Resolver
 copyright: Copyright © 2026
+publish: null
 directories:
   output: dist
   buildResources: resources
