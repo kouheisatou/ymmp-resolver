@@ -1,0 +1,27 @@
+{
+  "name": "ymmp-resolver",
+  "version": "1.0.0",
+  "description": "YukkuriMovieMaker4 asset file re-linker",
+  "main": "app/background.js",
+  "scripts": {
+    "dev": "nextron",
+    "build": "nextron build",
+    "build:mac": "nextron build --mac",
+    "build:win": "nextron build --win",
+    "build:linux": "nextron build --linux",
+    "postinstall": "electron-builder install-app-deps",
+    "screenshot": "npx ts-node --esm --skip-project scripts/screenshot.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.0",
+    "@types/react": "^19.0.0",
+    "electron": "^33.3.1",
+    "electron-builder": "^25.1.8",
+    "next": "^14.2.23",
+    "nextron": "^9.5.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
